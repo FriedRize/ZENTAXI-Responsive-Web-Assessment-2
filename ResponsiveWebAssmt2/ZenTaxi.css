@@ -1,0 +1,360 @@
+/* Theme color definitions */
+:root {
+    --zentaxi-gold: #d4af37;
+    --zentaxi-grey: #b8b8b8;
+    --zentaxi-dark: #1a1a1a;
+}
+
+/* Global resets and font settings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial Black', Gadget, sans-serif;
+}
+
+/* Full screen layout setup */
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header design with branding colors */
+.main-header {
+    background: #000;
+    border-bottom: 2px solid var(--zentaxi-gold);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    z-index: 1000;
+    flex-shrink: 0;
+}
+
+/* Branding title box */
+.zentaxi-box {
+    border: 3px solid var(--zentaxi-gold);
+    padding: 5px 15px;
+    color: var(--zentaxi-gold);
+    background: #111;
+    font-size: 20px;
+}
+
+/* Logo circle styling */
+.logo-container {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--zentaxi-gold);
+    border: 1px solid #fff;
+}
+
+.app-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Top icon group */
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.action-icon {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Map viewport settings */
+.map-wrapper {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Hide default routing instructions UI */
+.leaflet-routing-container {
+    display: none !important;
+}
+
+/* Floating overlay for inputs */
+.interaction-overlay {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 1200px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Input card grid alignment */
+.location-grid {
+    display: flex;
+    gap: 20px;
+    pointer-events: auto;
+}
+
+/* UI card styling with 3D shadow */
+.location-card {
+    flex: 1;
+    background: var(--zentaxi-grey);
+    border: 3px solid #000;
+    padding: 10px;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+/* White search bar styling */
+.search-strip {
+    background: #fff;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.search-strip input {
+    border: none;
+    flex: 1;
+    padding: 5px;
+    font-weight: bold;
+    outline: none;
+    text-transform: uppercase;
+}
+
+/* Icon buttons inside search bar */
+.locate-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 8px;
+}
+
+.search-ico {
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+/* Suggestion dropdown styling */
+.suggestion-list {
+    display: none;
+    flex-direction: column;
+    margin-top: 5px;
+    background: #fff;
+    border: 2px solid #000;
+}
+
+.suggestion-list button {
+    background: #eee;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+}
+
+.suggestion-list button:hover {
+    background: var(--zentaxi-gold);
+}
+
+/* Swap icon positioning */
+.swap-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swap-circle {
+    background: white;
+    border: 2px solid #000;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* Branding button design */
+.find-btn {
+    background: var(--zentaxi-gold);
+    border: 4px solid #000;
+    padding: 12px 30px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+    text-transform: uppercase;
+}
+
+/* Desktop specific button placement */
+@media (min-width: 1025px) {
+    .desktop-only {
+        display: block;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+    }
+
+    .mobile-only,
+    .mobile-footer {
+        display: none;
+    }
+
+    .location-grid {
+        flex-direction: row;
+    }
+}
+
+/* Mobile specific button and footer placement */
+@media (max-width: 1024px) {
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: block;
+        padding: 8px 15px;
+        font-size: 14px;
+        box-shadow: 2px 2px 0px #000;
+    }
+
+    .mobile-footer {
+        display: flex;
+        background: #000;
+        border-top: 2px solid var(--zentaxi-gold);
+        padding: 10px;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+        flex-shrink: 0;
+    }
+
+    .location-grid {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .interaction-overlay {
+        top: 10px;
+    }
+}
+
+/* Modal and form container styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+}
+
+.dropdown {
+    top: 70px;
+    right: 20px;
+    background: var(--zentaxi-grey);
+    border: 4px solid #000;
+    width: 250px;
+}
+
+.menu-list button {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border-bottom: 2px solid #888;
+    text-align: left;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-overlay {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.form-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--zentaxi-grey);
+    width: 90%;
+    max-width: 450px;
+    border: 5px solid #000;
+}
+
+.form-head {
+    background: #888;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 3px solid #000;
+}
+
+.form-body {
+    padding: 20px;
+}
+
+.form-body input,
+.form-body textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 3px solid #000;
+}
+
+.send-btn {
+    width: 100%;
+    padding: 15px;
+    background: #444;
+    color: white;
+    border: 2px solid #000;
+}
+
+.close-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #222;
+    color: white;
+    border: none;
+}
+
+.foot-icon {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+.profile-fields .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-fields span {
+    min-width: 70px;
+    font-weight: bold;
+}

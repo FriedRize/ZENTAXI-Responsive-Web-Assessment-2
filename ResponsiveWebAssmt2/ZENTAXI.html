@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENTAXI</title>
+    <!-- Main layout stylesheet -->
+    <link rel="stylesheet" href="ZenTaxi.css">
+    <!-- Leaflet map core CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Routing engine CSS for the blue path -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+</head>
+<body>
+    <!-- Top header with title and icons -->
+    <header class="main-header">
+        <div class="title-container">
+            <!-- Boxed branding title -->
+            <div class="zentaxi-box">ZENTAXI</div>
+        </div>
+        
+        <div class="logo-container">
+            <!-- Dedicated area for the app logo -->
+            <img src="ZenTaxiLogo.png" alt="Logo" class="app-logo">
+        </div>
+
+        <div class="header-actions">
+            <!-- Desktop triggers for profile and menu -->
+            <div class="action-icon" onclick="toggleModal('profile-modal')">👤</div>
+            <div class="action-icon" onclick="toggleModal('main-menu')">☰</div>
+        </div>
+    </header>
+
+    <main class="map-wrapper">
+        <!-- Target div for map injection -->
+        <div id="map"></div>
+
+        <!-- Floating UI for location selection -->
+        <div class="interaction-overlay">
+            <div class="location-grid">
+                <!-- Start location input card -->
+                <div class="location-card" id="pickup-card">
+                    <div class="search-strip">
+                        <span class="arrow">▼</span>
+                        <input type="text" id="pickup-input" placeholder="YOUR LOCATION" 
+                               onfocus="showSuggestions('pickup')" 
+                               onblur="hideSuggestions('pickup')"
+                               onkeyup="if(event.key === 'Enter') searchLocation('pickup')">
+                        <!-- Button to use browser GPS -->
+                        <button class="locate-btn" title="Set Current Location" onclick="findMyLocation()">📍</button>
+                        <span class="search-ico" onclick="searchLocation('pickup')">🔍</span>
+                    </div>
+                    <!-- Dropdown for tourist spot shortcuts -->
+                    <div class="suggestion-list" id="pickup-suggestions">
+                        <button onmousedown="setLoc(25.1972, 55.2744, 'pickup', 'Burj Khalifa')">Burj Khalifa</button>
+                        <button onmousedown="setLoc(25.1181, 55.2006, 'pickup', 'Mall of the Emirates')">Mall of the Emirates</button>
+                        <button onmousedown="setLoc(25.1973, 55.2793, 'pickup', 'Dubai Mall')">Dubai Mall</button>
+                        <button onmousedown="setLoc(25.2227, 55.2893, 'pickup', 'Museum of the Future')">Museum of the Future</button>
+                    </div>
+                </div>
+
+                <!-- Clickable icon to switch locations -->
+                <div class="swap-divider">
+                    <div class="swap-circle" onclick="swapLocations()">🔄</div>
+                </div>
+
+                <!-- End location input card -->
+                <div class="location-card" id="dest-card">
+                    <div class="search-strip">
+                        <span class="arrow">▼</span>
+                        <input type="text" id="dest-input" placeholder="DESTINATION" 
+                               onfocus="showSuggestions('dest')" 
+                               onblur="hideSuggestions('dest')"
+                               onkeyup="if(event.key === 'Enter') searchLocation('dest')">
+                        <span class="search-ico" onclick="searchLocation('dest')">🔍</span>
+                    </div>
+                    <div class="suggestion-list" id="dest-suggestions">
+                        <button onmousedown="setLoc(25.0819, 55.1367, 'dest', 'Dubai Marina')">Dubai Marina</button>
+                        <button onmousedown="setLoc(25.1124, 55.1390, 'dest', 'Palm Jumeirah')">Palm Jumeirah</button>
+                        <button onmousedown="setLoc(25.2532, 55.3657, 'dest', 'Dubai Airport')">Dubai Airport</button>
+                        <button onmousedown="setLoc(25.1412, 55.1852, 'dest', 'Burj Al Arab')">Burj Al Arab</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking button for desktop users -->
+        <button class="find-btn desktop-only" onclick="bookRide()">FIND TAXI</button>
+    </main>
+
+    <!-- Main navigation dropdown -->
+    <div id="main-menu" class="modal dropdown">
+        <div class="menu-list">
+            <button onclick="openForm('report-form')">REPORT DRIVER <span>▼</span></button>
+            <button onclick="openForm('suggestion-form')">SUGGESTIONS <span>▼</span></button>
+            <button onclick="openForm('question-form')">ASK QUESTIONS <span>▼</span></button>
+        </div>
+    </div>
+
+    <!-- Modals for questions, suggestions, and reports -->
+    <div id="question-form" class="modal form-overlay">
+        <div class="form-window">
+            <div class="form-head">ASK QUESTIONS</div>
+            <div class="form-body">
+                <input type="email" id="q-email" placeholder="ENTER YOUR EMAIL HERE...">
+                <label>WRITE YOUR QUESTION BELOW</label>
+                <textarea id="q-text"></textarea>
+                <button class="send-btn" onclick="handleSend('Question')">SEND QUESTION</button>
+                <button class="close-btn" onclick="closeModals()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="suggestion-form" class="modal form-overlay">
+        <div class="form-window">
+            <div class="form-head">SUGGESTIONS</div>
+            <div class="form-body">
+                <input type="email" id="s-email" placeholder="ENTER YOUR EMAIL HERE...">
+                <label>WRITE YOUR SUGGESTION BELOW</label>
+                <textarea id="s-text"></textarea>
+                <button class="send-btn" onclick="handleSend('Suggestion')">SEND SUGGESTION</button>
+                <button class="close-btn" onclick="closeModals()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="report-form" class="modal form-overlay">
+        <div class="form-window">
+            <div class="form-head">REPORT DRIVER</div>
+            <div class="form-body">
+                <input type="text" id="r-num" placeholder="ENTER THE DRIVER'S NUMBER HERE...">
+                <label>WRITE YOUR REPORT BELOW</label>
+                <textarea id="r-text"></textarea>
+                <button class="send-btn" onclick="handleSend('Report')">SEND REPORT</button>
+                <button class="close-btn" onclick="closeModals()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Functional profile settings modal -->
+    <div id="profile-modal" class="modal form-overlay">
+        <div class="form-window">
+            <div class="form-head">PROFILE SETTINGS</div>
+            <div class="form-body profile-fields">
+                <div class="row"><span>Name:</span> <input type="text" id="p-name" placeholder="Rizen"></div>
+                <div class="row"><span>Number:</span> <input type="text" id="p-phone" placeholder="+971..."></div>
+                <div class="row"><span>Email:</span> <input type="email" id="p-email" placeholder="Email@gmail.com"></div>
+                <button class="send-btn" onclick="saveProfile()">SAVE SETTINGS</button>
+                <button class="close-btn" onclick="closeModals()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation bar for mobile and tablet -->
+    <footer class="mobile-footer">
+        <div class="foot-icon" onclick="toggleModal('profile-modal')">👤</div>
+        <!-- Booking button centered in footer for mobile -->
+        <button class="find-btn mobile-only" onclick="bookRide()">FIND TAXI</button>
+        <div class="foot-icon" onclick="toggleModal('main-menu')">☰</div>
+    </footer>
+
+    <!-- Map and routing libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="ZenTaxiJava.js"></script>
+</body>
+</html>
